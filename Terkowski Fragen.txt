@@ -1,0 +1,40 @@
+
+
+Hellichkeit Für Diagramm
+
+
+Hellichekit der Lyrae sterne -> Wo findet man die in dem Seitenast?
+einfach der komplette Seitenast?
+
+
+
+
+
+
+
+
+
+Skript wie viel soll ich da noch machen bzw wie findet er das bisherige
+-> wie viel soll ich darüber in meiner Arbeit schreiben -> Matching algorythmen, algorythmen, run time (n * log(n)), (memory <-> run time) => nicht viel, maybe Anhang?
+physik im Vordergrund Diskutieren, Info im Hintergrund, Fehlerquellen Zentral diskutieren => Filterwellenglängen mit Appas etc etc, Baadar Filter im Manual? => Photometrie mit Astroart mit AstroArt
+
+
+Hellichkeiten
+	Wie bekomme ich die Hellichkeiten -> Filter (in Astro Art)
+	Wenn nicht hellichkeiten, wie dann
+
+Wie würde er weiter machen -> Ziel Entfernung, Alter bestimmen
+
+
+
+
+Sternenatlas für Filter
+im Mebiskurs
+
+Appas V oder B in dem Katalog eingestellt Fehlerquelle genaue Farbe
+durchlassbreiten in Manual
+
+
+Nach feritg: Abknickpunkt wird man nicht sehen (alter Kugelsternhaufen)
+=> einlesen Kugelsternhaufen Alter bestimmung Horizontalast => weiß die absolute hellichkeit, lyrae Sterne => absolute Hellichkeit maybe, Entfernung probably schon, Alter Wahrscheinlich einfach nicht bestimmen, solls versuchen aber halt probably falsch
+
