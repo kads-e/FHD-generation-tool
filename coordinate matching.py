@@ -25,6 +25,10 @@ bv_data = []
 blau_war_heller = 0
 gruen_war_heller = 0
 
+# user input for RR Lyrae visual magnitude and absolute magnitude
+rr_lyrae_visual_magnitude = None  # Set to a float value if known
+rr_lyrae_absolute_magnitude = 0.75
+
 # functions
 def read_csv_file(filename):
     return read_csv_file_with_header(filename, header_lines)
@@ -133,9 +137,13 @@ bv_data = calc_bv_data(star_data[0], star_data[1], matches)
 app_mag_data = calc_AngenäherteScheinbareHelligkeit_TEMP(star_data[0], star_data[1], matches)
 
 
+# calc distance and absolute magnitude, if RR lyrae visual magnitude is known
+if rr_lyrae_visual_magnitude is not None:
+    distance = calc_Entfernungsmodul(rr_lyrae_visual_magnitude, rr_lyrae_absolute_magnitude)
+    absolute_magnitude = calc_AngenäherteAbsoluteHelligkeit(rr_lyrae_visual_magnitude, distance)
+    print(f"Distance: {distance} pc")
+    print(f"Absolute Magnitude: {absolute_magnitude}")
 
-
-# TODO: print diagram with matplotlib
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
