@@ -16,7 +16,7 @@ header_lines = 10
 infiles = ["Blau_neu.txt", "Grün_neu.txt"]
 rr_lyrae_visual_magnitude = 14.95 # Set to a float value of magnitude if known
 distance_error = 0.5 # in magnitudes, range in which a bound gets calculated for distance calculations
-min_ns = 5 # minimum Noise to Signal ratio => lower brightness stars will be ignored
+min_NS = 5 # minimum Noise to Signal ratio => lower brightness stars will be ignored, numbers used: 5-20
 
 # data
 gruen = []
@@ -43,7 +43,7 @@ def read_csv_file_with_header(filename, header_lines):
             delimiter=";", 
             quoting=csv.QUOTE_NONNUMERIC
         )
-        return [row for row in reader if row[6] > min_ns] # lower brightness stars will be ignored
+        return [row for row in reader if row[6] > min_NS] # lower brightness stars will be ignored
 
         
 
