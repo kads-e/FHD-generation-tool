@@ -12,7 +12,7 @@ rr_lyrae_absolute_magnitude = 0.75 # as seen in sources (TODO: what source)
 
 
 # input
-header_lines = 10
+header_lines = 10 # the astropy script gives 10 header lines by dafault, lower if needed
 infiles = ["Blau_neu.txt", "Grün_neu.txt"]
 rr_lyrae_visual_magnitude = 14.95 # Set to a float value of magnitude if known
 distance_error = 0.5 # in magnitudes, range in which a bound gets calculated for distance calculations
