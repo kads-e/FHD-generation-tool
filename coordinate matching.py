@@ -16,7 +16,7 @@ header_lines = 10 # the astropy script gives 10 header lines by dafault, lower i
 infiles = ["Blau_neu.txt", "Grün_neu.txt"]
 rr_lyrae_visual_magnitude = 14.95 # Set to a float value of magnitude if known
 distance_error = 0.5 # in magnitudes, range in which a bound gets calculated for distance calculations
-min_NS = 5 # minimum Noise to Signal ratio => lower brightness stars will be ignored, numbers used: 5-20
+min_NS = 7 # minimum Noise to Signal ratio => lower brightness stars will be ignored, numbers used: 5-20
 
 # data
 gruen = []
@@ -73,7 +73,6 @@ def match_stars(in_blau, in_gruen, max_sep_arcsec=1):
 
 
 def match_stars_old(in_blau, in_gruen):
-    # TODO: matcht alle Sterne aus den beiden Sets miteinander, dabei gesamtdistanz im Matching minimieren
     # 1. Kostenmatrix zwischen den beiden Sternlisten aufstellen:
     #   https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cdist.html
     #   scipy.spatial.distance.cdist
@@ -81,7 +80,7 @@ def match_stars_old(in_blau, in_gruen):
     cdist_in_blau = [row[3:5] for row in in_blau]
     cdist_in_gruen = [row[3:5] for row in in_gruen]
     try:
-        kosten_bg = sp.spatial.distance.cdist(cdist_in_blau, cdist_in_gruen, metric='sqeuclidean') #TODO euclidian mit sqeuclidean vergleichen
+        kosten_bg = sp.spatial.distance.cdist(cdist_in_blau, cdist_in_gruen, metric='sqeuclidean') 
     except ValueError:
         print("ValueError when trying to calculate cdist. Check your inputs.")
 
@@ -101,7 +100,6 @@ def match_stars_old(in_blau, in_gruen):
     return [(row_ind[i], col_ind[i]) for i in range(0, min(len(row_ind), len(col_ind)) - 1)]
 
 def calc_bv(b_g_pair):
-    # TODO
     return b_g_pair[0][7] - b_g_pair[1][7]
 
 def calc_bv_data(blau, gruen, matching):
