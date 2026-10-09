@@ -26,9 +26,9 @@ blau_war_heller = 0
 gruen_war_heller = 0
 
 # user input for RR Lyrae visual magnitude and absolute magnitude
-rr_lyrae_visual_magnitude = None  # Set to a float value if known
-rr_lyrae_absolute_magnitude = 0.75
-
+rr_lyrae_visual_magnitude = 14.95 # Set to a float value of magnitude if known
+rr_lyrae_absolute_magnitude = 0.75 # as seen in sources (TODO: what source)
+distance_error = 0.5 # in magnitudes, range in which a bound gets calculated for distance calculations
 # functions
 def read_csv_file(filename):
     return read_csv_file_with_header(filename, header_lines)
@@ -108,6 +108,9 @@ def calc_bv_data(blau, gruen, matching):
 def calc_Entfernungsmodul(m, M):         # m = scheinbare Helligkeit, M = absolute Helligkeit (auszurechnen)
     return 10**(0.2 * (m - M)) * 10 # * pc           falls in m gewünscht, sonst in pc
 
+def pc_to_ly(pc):
+    return pc * 3.26156
+
 def calc_AngenäherteAbsoluteHelligkeit(m, d):  # m = scheinbare Helligkeit, d = Entfernung in pc
     return m - 5 * (np.log10(d) - 1)
 
@@ -123,7 +126,23 @@ def calc_AngenäherteScheinbareHelligkeit_TEMP(blau, gruen, matching):
             blau_war_heller += 1
         else:
             gruen_war_heller += 1
-    return scheinbare_helligkeit    
+    return scheinbare_helligkeit   
+
+def calc_distance(rr_lyrae_visual_magnitude, rr_lyrae_absolute_magnitude):
+    distance = calc_Entfernungsmodul(rr_lyrae_visual_magnitude, rr_lyrae_absolute_magnitude)
+    upper_distance = calc_Entfernungsmodul(rr_lyrae_visual_magnitude+distance_error/2 , rr_lyrae_absolute_magnitude)
+    lower_distance = calc_Entfernungsmodul(rr_lyrae_visual_magnitude-distance_error/2 , rr_lyrae_absolute_magnitude)
+    print(f"Distance: {lower_distance} - {upper_distance} pc or {pc_to_ly(lower_distance)} - {pc_to_ly(upper_distance)} light years")
+# pyplot event handler
+
+def on_pick(event):
+    if event.artist is FHD:
+        for index in event.ind:
+            print(f"Star number: {index + 1}")
+            print(f"B-V: {bv_data[index]}, Apparent Magnitude: {app_mag_data[index]}, Coordinates: RA={star_data[0][matches[index][0]][3]}, Dec={star_data[0][matches[index][0]][4]}, blue Coordinates: X={star_data[1][matches[index][0]][1]}, Y={star_data[1][matches[index][0]][2]}, green coordinates: X={star_data[0][matches[index][1]][1]}, Y={star_data[0][matches[index][1]][2]}")
+            print()
+            ax.annotate(str(index + 1), xy=(bv_data[index], app_mag_data[index]), xytext=(-10, 7), textcoords="offset points")
+        fig.canvas.draw()
 
 
 
@@ -139,34 +158,19 @@ app_mag_data = calc_AngenäherteScheinbareHelligkeit_TEMP(star_data[0], star_dat
 
 # calc distance and absolute magnitude, if RR lyrae visual magnitude is known
 if rr_lyrae_visual_magnitude is not None:
-    distance = calc_Entfernungsmodul(rr_lyrae_visual_magnitude, rr_lyrae_absolute_magnitude)
-    absolute_magnitude = calc_AngenäherteAbsoluteHelligkeit(rr_lyrae_visual_magnitude, distance)
-    print(f"Distance: {distance} pc")
-    print(f"Absolute Magnitude: {absolute_magnitude}")
+    calc_distance(rr_lyrae_visual_magnitude, rr_lyrae_absolute_magnitude)
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
 FHD = ax.plot(bv_data, app_mag_data, "o", picker=5)[0] # picker = 5 => tolleranz
+plt.title("FHD M13")
 plt.xlabel("B-V")
 plt.ylabel("Apparent Magnitude")
 plt.gca().invert_yaxis()  # Invert y-axis for apparent magnitude
 
 #for i, (bv, app_mag) in enumerate(zip(bv_data, app_mag_data), start=1):
 #    ax.annotate(str(i), xy=(bv, app_mag), xytext=(-10, 7), textcoords="offset points")
-
-
-def on_pick(event):
-    if event.artist is FHD:
-        for index in event.ind:
-            print(f"Star number: {index + 1}")
-            print(f"B-V: {bv_data[index]}, Apparent Magnitude: {app_mag_data[index]}, Coordinates: RA={star_data[0][matches[index][0]][3]}, Dec={star_data[0][matches[index][0]][4]}, blue Coordinates: X={star_data[1][matches[index][0]][1]}, Y={star_data[1][matches[index][0]][2]}, green coordinates: X={star_data[0][matches[index][1]][1]}, Y={star_data[0][matches[index][1]][2]}")
-            print()
-            ax.annotate(str(index + 1), xy=(bv_data[index], app_mag_data[index]), xytext=(-10, 7), textcoords="offset points")
-        fig.canvas.draw()            
-            #time.sleep(0.25)
-            
-
 
 fig.canvas.mpl_connect("pick_event", on_pick)
 
