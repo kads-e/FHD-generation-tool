@@ -5,30 +5,30 @@ import astropy.units as u
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 import matplotlib.pyplot as plt
-#import time
 
 # constants
 pc = 3.085677581e16  # Parsec in m
+rr_lyrae_absolute_magnitude = 0.75 # as seen in sources (TODO: what source)
+
 
 # input
 header_lines = 10
 infiles = ["Blau_neu.txt", "Grün_neu.txt"]
+rr_lyrae_visual_magnitude = 14.95 # Set to a float value of magnitude if known
+distance_error = 0.5 # in magnitudes, range in which a bound gets calculated for distance calculations
+min_ns = 5 # minimum Noise to Signal ratio => lower brightness stars will be ignored
 
 # data
 gruen = []
 blau = []
 star_data = [blau, gruen]
-
 matches = []
 bv_data = []
 
 blau_war_heller = 0
 gruen_war_heller = 0
 
-# user input for RR Lyrae visual magnitude and absolute magnitude
-rr_lyrae_visual_magnitude = 14.95 # Set to a float value of magnitude if known
-rr_lyrae_absolute_magnitude = 0.75 # as seen in sources (TODO: what source)
-distance_error = 0.5 # in magnitudes, range in which a bound gets calculated for distance calculations
+
 # functions
 def read_csv_file(filename):
     return read_csv_file_with_header(filename, header_lines)
@@ -43,7 +43,9 @@ def read_csv_file_with_header(filename, header_lines):
             delimiter=";", 
             quoting=csv.QUOTE_NONNUMERIC
         )
-        return [row for row in reader]
+        return [row for row in reader if row[6] > min_ns] # lower brightness stars will be ignored
+
+        
 
 
 def match_stars(in_blau, in_gruen, max_sep_arcsec=1):
