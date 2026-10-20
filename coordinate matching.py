@@ -24,6 +24,7 @@ blau = []
 star_data = [blau, gruen]
 matches = []
 bv_data = []
+total_abs_mag = 0
 
 blau_war_heller = 0
 gruen_war_heller = 0
@@ -114,7 +115,7 @@ def pc_to_ly(pc):
 def calc_AngenäherteAbsoluteHelligkeit(m, d):  # m = scheinbare Helligkeit, d = Entfernung in pc
     return m - 5 * (np.log10(d) - 1)
 
-def calc_AngenäherteScheinbareHelligkeit_TEMP(blau, gruen, matching):
+def calc_ScheinbareHelligkeit(blau, gruen, matching):
     scheinbare_helligkeit = []
     blau_war_heller = 0
     gruen_war_heller = 0
@@ -136,7 +137,10 @@ def calc_distance(rr_lyrae_visual_magnitude, rr_lyrae_absolute_magnitude):
 # pyplot event handler
 
 def calc_absolute_magnitude(app_mag, distance_pc):
-    return app_mag - 5 * (np.log10(distance_pc) - 1)
+    global total_abs_Leuchtkraft
+    abs_mag = app_mag - 5 * (np.log10(distance_pc) - 1)
+    total_abs_Leuchtkraft += abs_mag
+    return abs_mag
 
 def on_pick(event):
     if event.artist is FHD:
@@ -156,7 +160,7 @@ for i,f in enumerate(infiles):
 matches = match_stars(star_data[0], star_data[1])
 
 bv_data = calc_bv_data(star_data[0], star_data[1], matches)
-app_mag_data = calc_AngenäherteScheinbareHelligkeit_TEMP(star_data[0], star_data[1], matches)
+app_mag_data = calc_ScheinbareHelligkeit(star_data[0], star_data[1], matches)
 
 
 # calc distance and absolute magnitude, if RR lyrae visual magnitude is known
