@@ -135,6 +135,9 @@ def calc_distance(rr_lyrae_visual_magnitude, rr_lyrae_absolute_magnitude):
     print(f"Distance: {lower_distance} - {upper_distance} pc or {pc_to_ly(lower_distance)} - {pc_to_ly(upper_distance)} light years")
 # pyplot event handler
 
+def calc_absolute_magnitude(app_mag, distance_pc):
+    return app_mag - 5 * (np.log10(distance_pc) - 1)
+
 def on_pick(event):
     if event.artist is FHD:
         for index in event.ind:
@@ -159,6 +162,9 @@ app_mag_data = calc_AngenäherteScheinbareHelligkeit_TEMP(star_data[0], star_dat
 # calc distance and absolute magnitude, if RR lyrae visual magnitude is known
 if rr_lyrae_visual_magnitude is not None:
     calc_distance(rr_lyrae_visual_magnitude, rr_lyrae_absolute_magnitude)
+#calc absolute magnitude for each star
+    absolute_magnitude_data = [calc_absolute_magnitude(app_mag, calc_Entfernungsmodul(rr_lyrae_visual_magnitude, rr_lyrae_absolute_magnitude)) for app_mag in app_mag_data]
+# TODO: hier noch mal schauen, ob das hier stimmt, nur lurz in der Pause zusammengekritzelt
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
